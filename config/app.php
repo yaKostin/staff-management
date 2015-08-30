@@ -144,6 +144,22 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Grid View Service Providers...
+         */
+        'Nayjest\Grids\ServiceProvider',
+        'Collective\Html\HtmlServiceProvider',
+
+        /*
+         * Baum (implementation of Nested Set pattern) Provider...
+         */
+        'Baum\Providers\BaumServiceProvider',
+
+        /*
+         * HTML Helper Provider...
+         */
+        'Illuminate\Html\HtmlServiceProvider',
+
     ],
 
     /*
@@ -191,6 +207,11 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+
+        // Grid View aliases
+        'Form'  => 'Illuminate\Html\FormFacade',
+        'HTML'  => 'Collective\Html\HtmlFacade',
+        'Grids'     => 'Nayjest\Grids\Grids',
 
     ],
 

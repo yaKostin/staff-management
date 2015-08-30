@@ -24,7 +24,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
+        $this->publishes([
+                dirname(dirname(__DIR__)) . '\vendor\bower_components\jstree/dist' => public_path('vendor/jstree'),
+            ], 'public');
 
         parent::boot($router);
     }
