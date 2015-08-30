@@ -15,5 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/employees-hierarchy', 'EmployeeController@hierarchy');
-Route::get('/employees-grid', 'EmployeeController@grid');
+// Employees
+Route::get('employees', 'EmployeeController@hierarchy');
+Route::get('employees/hierarchy', 'EmployeeController@hierarchy');
+Route::get('employees/grid', 'EmployeeController@grid');

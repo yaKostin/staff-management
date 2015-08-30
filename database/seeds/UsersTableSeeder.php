@@ -41,6 +41,10 @@ class UsersTableSeeder extends Seeder
         $positions = $rootPosition->getImmediateDescendants();
         foreach ($positions as $position) 
         {
+            if ($position->isLeaf())
+            {
+                $usersPerPositionMaxCount = 3;    
+            }
             for ($i = 0; $i < $usersPerPositionMaxCount; $i++)
             {
                 $user = $this->createFakeUser($salary, $position->id);

@@ -47,6 +47,7 @@ class EmployeeController extends Controller
     
     public function index()
     {
+        $this->hierarchy();
     }
 
     public function hierarchy()
