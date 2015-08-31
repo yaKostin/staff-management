@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call('PositionsTableSeeder');
         $this->call('UsersTableSeeder');
-        $this->command->info('Notices table seeded!');
 
         Model::reguard();
     }

@@ -19,9 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('name', 64);
             $table->string('surname', 64);
             $table->string('patronymic', 64);
-            $table->integer('position_id')->unsigned();
-            $table->date('hire_date');
-            $table->integer('salary')->unsigned();
+            $table->integer('position_id')->unsigned()->nullable()->default(null);
+            $table->date('hire_date')->nullable();
+            $table->integer('salary')->unsigned()->nullable();
             $table->string('email')->unique();
             $table->string('password', 60);
             $table->rememberToken();

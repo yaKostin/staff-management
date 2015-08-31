@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Baum\Node;
 
-class Position extends Model
+class Position extends Node
 {
     /**
      * The database table used by the model.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Employee;
 
 use Illuminate\Http\Request;
 
@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Models\Position;
-
+use Auth;
 use HTML;
 
 use Nayjest\Grids\Components\Base\RenderableRegistry;
@@ -47,26 +47,70 @@ class EmployeeController extends Controller
     
     public function index()
     {
-        $this->hierarchy();
     }
 
+    /**
+     * Build html list element of tree node
+     *
+     * @return string
+     */
+    public function renderNode($node) 
+    {
+        if( $node->isLeaf() ) 
+        {
+            return '<li>' 
+                . '<span class="glyphicon glyphicon-star"></span>'
+                . $node->name . ' '
+                . $node->patronymic . ' '
+                . $node->surname  . ' (' 
+                . $node->position->text . ')'
+                . '</li>';
+        }
+        else
+        {
+            $html = '<li>'
+                . '<span class="glyphicon glyphicon-user"></span>'
+                . $node->name . ' '
+                . $node->patronymic . ' '
+                . $node->surname  . ' ('
+                . $node->position->text . ')'
+                . '<ul>';
+
+            foreach($node->children as $child)
+                $html .= $this->renderNode($child);
+
+            $html .= '</ul>'
+                . '</li>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
     public function hierarchy()
     {
-        $positionsHierarchy = User::all()->toHierarchy();
+        $usersHierarchy = User::getFullHierarchy();
         $usersHierarchyHTML = '';
-        foreach ($positionsHierarchy as $node) 
+        foreach ($usersHierarchy as $node) 
         {
             $usersHierarchyHTML = $this->renderNode($node);
         }
         
+        $user = Auth::user();
+        
         return view('pages\employees-hierarchy', [
-            'usersHierarchyHTML' => $usersHierarchyHTML
+            'usersHierarchyHTML' => $usersHierarchyHTML,
+            'user' => $user
             ]);
     }
 
     public function grid()
     {
-        $query = new EloquentDataProvider(User::query());
+        $query = new EloquentDataProvider(User::getAllEmployeesQuery());
 
         $usersGrid = new Grid(
             (new GridConfig)
@@ -150,38 +194,6 @@ class EmployeeController extends Controller
         return view('pages\employees-grid', [
             'usersGrid' => $usersGrid
             ]);
-    }
-
-    public function renderNode($node) 
-    {
-        if( $node->isLeaf() ) 
-        {
-            return '<li>' 
-                . '<span class="glyphicon glyphicon-star"></span>'
-                . $node->name . ' '
-                . $node->patronymic . ' '
-                . $node->surname  . ' (' 
-                . $node->position->text . ')'
-                . '</li>';
-        }
-        else
-        {
-            $html = '<li>'
-                . '<span class="glyphicon glyphicon-user"></span>'
-                . $node->name . ' '
-                . $node->patronymic . ' '
-                . $node->surname  . ' ('
-                . $node->position->text . ')'
-                . '<ul>';
-
-            foreach($node->children as $child)
-                $html .= $this->renderNode($child);
-
-            $html .= '</ul>'
-                . '</li>';
-        }
-
-        return $html;
     }
 
     /**

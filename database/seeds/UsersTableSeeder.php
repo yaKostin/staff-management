@@ -11,6 +11,8 @@ use App\Models\Position;
 class UsersTableSeeder extends Seeder
 {
     private $faker;
+    private $password;
+
     /**
      * Run the database seeds.
      *
@@ -19,6 +21,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $this->faker = Faker::create();
+        $this->password = bcrypt('password');
         $chiefPosition = Position::first();
         $chiefSalary = 100000;        
         $chief = $this->createFakeUser($chiefSalary, $chiefPosition->id);
@@ -64,9 +67,8 @@ class UsersTableSeeder extends Seeder
     		'position_id' => $position_id,
     		'hire_date' => $this->faker->date,
             // use str_random instead 'email' faker field to create unique address
-    		'email' => str_random(20) . '@gmail.com', 
-    		'password' => str_random(10),
-			'remember_token' => str_random(10)
+    		'email' => str_random(10) . '@gmail.com', 
+    		'password' => $this->password,
     		]);
     	return $user;
     }

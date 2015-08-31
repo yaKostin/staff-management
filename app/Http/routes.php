@@ -11,11 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Employees routes...
+Route::get('employees/hierarchy', 'Employee\EmployeeController@hierarchy');
+Route::group(['middleware' => 'auth'], function() {
+	Route::get('employees', 'Employee\EmployeeController@hierarchy');
+	Route::get('employees/grid', 'Employee\EmployeeController@grid');
 });
 
-// Employees
-Route::get('employees', 'EmployeeController@hierarchy');
-Route::get('employees/hierarchy', 'EmployeeController@hierarchy');
-Route::get('employees/grid', 'EmployeeController@grid');
+// Authentication routes...
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+// Registration routes...
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');

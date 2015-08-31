@@ -1,11 +1,10 @@
 @extends('layouts.default')
+
 @section('content')
-    <div class="title"> 
-        <h1>Иерархия сотрудников</h1>
-    </div>
     <div class="row">
-        <button id="toogle_open_all_nodes_btn" class="btn btn-success">Раскрыть все узлы</button>
+        <button id="toogle_open_all_nodes_btn" class="btn btn-lg btn-success">Раскрыть все узлы</button>
     </div>
+
     <div class='row'>
         <div id="users_hierarchy" class="hidden">
             <ul>
@@ -34,9 +33,6 @@
                 $('#users_hierarchy').jstree('open_all');     
                 $('#toogle_open_all_nodes_btn').removeClass('btn-success').addClass('btn-danger');
                 $('#toogle_open_all_nodes_btn').text('Закрыть все узлы');
-
-                $('#users_hierarchy').jstree('set_icon', 'j1_1_anchor', 'http://maps.google.com/mapfiles/kml/pal3/icon55.png');     
-                
             }
             else {
                 $('#users_hierarchy').jstree('close_all');     
@@ -46,4 +42,3 @@
         });
     </script>
 @stop
-
