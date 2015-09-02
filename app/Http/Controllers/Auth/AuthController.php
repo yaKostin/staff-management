@@ -25,6 +25,7 @@ class AuthController extends Controller
 
     protected $redirectPath = 'employees/hierarchy';
     protected $loginPath = 'employees/grid';
+    protected $redirectAfterLogout = 'employees/hierarchy';
 
     /**
      * Create a new authentication controller instance.
@@ -45,8 +46,10 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'name' => 'required|max:64',
+            'surname' => 'required|max:64',
+            'patronymic' => 'required|max:64',
+            'email' => 'required|email|max:120|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -61,13 +64,10 @@ class AuthController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'surname' => $data['surname'],
+            'patronymic' => $data['patronymic'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }
-
-    /*public function getRegister()
-    {
-        return view('');
-    }*/
 }

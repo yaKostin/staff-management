@@ -1,6 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="row">
         <button id="toogle_open_all_nodes_btn" class="btn btn-lg btn-success">Раскрыть все узлы</button>
     </div>
@@ -19,8 +20,15 @@
                 'core': {
                     'themes': {
                         'icons': false,
-                    }
-                }
+                    },
+                    "check_callback" : true
+                },
+                'dnd': {
+                    'inside_pos': 'last'
+                },
+                "plugins" : [
+                    "dnd"
+                ]
             });
         });
 
@@ -40,5 +48,33 @@
                 $('#toogle_open_all_nodes_btn').text('Открыть все узлы');
             }
         });
+
+        $(document).on("dnd_move.vakata", function (e, data) {
+            console.log(data);
+        });
+
+        $(document).on("dnd_stop.vakata", function (e, data) {
+            $('#users_hierarchy').jstree('refresh');
+            var childId = $(data.element).find('span').data('id');
+            var t = $(data.event.target);
+            var parentNode = t.closest('.jstree-node');
+            var parentId = $(parentNode).find('span').data('id');
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost/staff-management/public/employees/change-parent',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'childId': childId,
+                    'parentId': parentId
+                }
+            })
+            .done(function(response) {
+                //alert( response);
+            })
+            .fail(function() {
+                //alert( "error" );
+            });
+        });
+
     </script>
 @stop

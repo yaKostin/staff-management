@@ -13,9 +13,12 @@
 
 // Employees routes...
 Route::get('employees/hierarchy', 'Employee\EmployeeController@hierarchy');
+Route::post('employees/change-parent', 'Employee\EmployeeController@makeChildOf');
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('employees', 'Employee\EmployeeController@hierarchy');
 	Route::get('employees/grid', 'Employee\EmployeeController@grid');
+	Route::get('employees/{id}/edit', 'Employee\EmployeeController@getEdit');
+	Route::post('employees/{id}/edit', 'Employee\EmployeeController@postEdit');
 });
 
 // Authentication routes...

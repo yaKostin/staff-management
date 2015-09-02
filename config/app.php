@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -160,6 +160,7 @@ return [
          */
         'Illuminate\Html\HtmlServiceProvider',
 
+        'Intervention\Image\ImageServiceProvider'
     ],
 
     /*
@@ -207,7 +208,8 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-
+        'Image' => 'Intervention\Image\Facades\Image',
+        
         // Grid View aliases
         'Form'  => 'Illuminate\Html\FormFacade',
         'HTML'  => 'Collective\Html\HtmlFacade',

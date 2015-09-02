@@ -15,7 +15,7 @@
                     </ul>
                 </div>
             @endif
-            <form method="POST" action="http://localhost/staff-management/public/auth/login">
+            <form method="POST" action="{{ URL::to('auth/login') }}">
                 {!! csrf_field() !!}
                 <div class="form-group">
                     <label>Email</label>

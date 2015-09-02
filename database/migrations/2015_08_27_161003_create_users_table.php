@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->integer('position_id')->unsigned()->nullable()->default(null);
             $table->date('hire_date')->nullable();
             $table->integer('salary')->unsigned()->nullable();
-            $table->string('email')->unique();
+            $table->string('email', 120)->unique();
             $table->string('password', 60);
             $table->rememberToken();
             $table->timestamps();

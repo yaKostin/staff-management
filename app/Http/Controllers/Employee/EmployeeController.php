@@ -6,11 +6,16 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use App\Http\Requests\Employees\UserRequest;
 use App\Models\User;
 use App\Models\Position;
+
+use Input;
 use Auth;
 use HTML;
+use Image;
 
 use Nayjest\Grids\Components\Base\RenderableRegistry;
 use Nayjest\Grids\Components\ColumnHeadersRow;
@@ -37,6 +42,7 @@ use Nayjest\Grids\FilterConfig;
 use Nayjest\Grids\Grid;
 use Nayjest\Grids\GridConfig;
 
+
 class EmployeeController extends Controller
 {
     /**
@@ -59,20 +65,20 @@ class EmployeeController extends Controller
         if( $node->isLeaf() ) 
         {
             return '<li>' 
-                . '<span class="glyphicon glyphicon-star"></span>'
+                . '<span data-id="' . $node->id . '" class="glyphicon glyphicon-star"></span>'
                 . $node->name . ' '
                 . $node->patronymic . ' '
-                . $node->surname  . ' (' 
+                . $node->id  . ' (' 
                 . $node->position->text . ')'
                 . '</li>';
         }
         else
         {
             $html = '<li>'
-                . '<span class="glyphicon glyphicon-user"></span>'
+                . '<span data-id="' . $node->id . '" class="glyphicon glyphicon-user"></span>'
                 . $node->name . ' '
                 . $node->patronymic . ' '
-                . $node->surname  . ' ('
+                . $node->id  . ' ('
                 . $node->position->text . ')'
                 . '<ul>';
 
@@ -197,16 +203,6 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
@@ -234,9 +230,47 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function getEdit($id)
     {
-        //
+        $employee = User::find($id);
+
+        return view('pages\employee-edit', [
+            'user' => $employee
+        ]);
+    }
+
+    public function postEdit(UserRequest $request, $id)
+    {
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->patronymic = $request->patronymic;
+        $user->email = $request->email;
+
+        if (Input::file('image')->isValid()) {
+            $destinationPath = 'uploads'; 
+            $imageFile = Input::file('image');
+            $extension = $imageFile->getClientOriginalExtension();
+            $fileName = $user->id . '.' . $extension; 
+            $fileThumbnailName = $user->id. '_thumbnail.' . $extension;
+            Image::make($imageFile)->fit(250, 250)->save($destinationPath . '/' . $fileThumbnailName);
+            $imageFile->move($destinationPath, $fileName);
+        }
+
+        $user->save();
+    }
+
+    public function makeChildOf()
+    {
+        $data = Input::all();
+        $childId = $data['childId'];
+        $parentId = $data['parentId'];
+
+        
+        $childUser = User::find($childId);
+        $parentUser = User::find($parentId);
+
+        $childUser->makeChildOf($parentUser);
     }
 
     /**
